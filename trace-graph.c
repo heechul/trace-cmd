@@ -1735,9 +1735,13 @@ static void set_color(GtkWidget *widget, GdkGC *gc, gint c)
 {
 	GdkColor color;
 
+
 	color.red = (c & 0xff)*(65535/255);
 	color.blue = ((c >> 8) & 0xff)*(65535/255);
 	color.green = ((c >> 16) & 0xff)*(65535/255);
+
+	fprintf(stderr, "HEECHUL: color (%d/%d/%d)\n", color.red, color.green, color.blue);
+	
 	gdk_color_alloc(gtk_widget_get_colormap(widget), &color);
 	gdk_gc_set_foreground(gc, &color);
 }
@@ -1838,6 +1842,10 @@ static void draw_plot_box(struct graph_info *ginfo, int i,
 			  gint x1, gint x2,
 			  gboolean fill, GdkGC *gc)
 {
+#if 0
+	fprintf(stderr, "HEECHUL: i=%d, x1=%d, x2=%d, fill=%d\n",
+		i, x1, x2, fill);
+#endif	
 	gdk_draw_rectangle(ginfo->curr_pixmap, gc,
 			   fill,
 			   x1, PLOT_BOX_TOP(i),
@@ -1874,6 +1882,8 @@ static void draw_plot(struct graph_info *ginfo, struct graph_plot *plot,
 	trace_graph_plot_event(ginfo, plot, record);
 	info = &plot->info;
 
+	fprintf(stderr, "HEECHUL: plot->label: %s, info->bcolor=%d\n",  plot->label, info->bcolor);
+	
 	if (info->box) {
 		x = convert_time_to_x(ginfo, info->bstart);
 		x2 = convert_time_to_x(ginfo, info->bend);
